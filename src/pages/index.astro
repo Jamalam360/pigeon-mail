@@ -1,25 +1,43 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Register from "../components/auth/Register";
 ---
 
 <Layout title="Pigeon Mail">
   <main class="w-full flex items-center justify-center">
-    <div class="w-2/3 flex flex-col items-center justify-center">
+    <div class="w-4/5 md:w-2/3 flex flex-col items-center justify-center">
       <h2 class="text-2xl">
         Chat with a daily pen pal <strong class="font-bold"
           >completely annonymously</strong
         >.
       </h2>
-      <img src="/world-map.png" class="w-full my-16" />
-      <ul class="mt-16 list-disc">
+      <img
+        src="/world-map.svg"
+        alt="A map of the world."
+        class="w-full my-16 stroke-maize"
+      />
+      <ul class="list-disc mb-8">
         <li>Chat with a new pen pal every day.</li>
         <li>
-          Who needs instant messaging? Wait for our pigeons to deliver your mail
-          across the globe instead.
+          Instant messaging is so last week. Wait for our pigeons to deliver
+          your mail across the globe instead.
         </li>
         <li>
           Completely annonymous. Messages are deleted from our database the next
           day.
+        </li>
+      </ul>
+
+      <Register client:load />
+
+      <ul class="flex flex-row pt-6">
+        <li class="mr-4">
+          <a href="https://github.com/Jamalam360/pigeon-mail" target="_blank"
+            ><img class="w-12" src="/icons/github.svg" /></a>
+        </li>
+        <li>
+          <a href="https://discord.jamalam.tech" target="_blank"
+            ><img class="w-12" src="/icons/message-circle.svg" /></a>
         </li>
       </ul>
     </div>

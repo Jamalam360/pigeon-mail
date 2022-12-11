@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "gen:types": "npx supabase gen types typescript --project-id jqngsjedzjqzavtwcliw --schema public --schema auth > ./src/supabase/types.gen.ts",
-    "fmt": "npx eslint --fix ."
+    "lint": "npx eslint --fix ."
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.46.0",

@@ -145,16 +145,16 @@ export default function Login() {
             e.country.startsWith("the") ? "T" + e.country.slice(1) : e.country
           )}
         />
+        <div class="pt-3 relative flex flex-col space-y-2">
+          <Button action="primary" disabled={status.isLoading} type="submit">
+            {status.isLoading && <Spinner />} Register
+          </Button>
+          {status.error !== "" && (
+            <div class="text-sm text-red-400">{status.error}</div>
+          )}
+          <Link href="/auth/login">Already have an account? Login</Link>
+        </div>
       </form>
-      <div class="w-2/3 md:w-1/2 pt-3 relative">
-        <Button action="primary" disabled={status.isLoading} type="submit">
-          {status.isLoading && <Spinner />} Register
-        </Button>
-        {status.error !== "" && (
-          <div class="text-sm text-red-400">{status.error}</div>
-        )}
-        <Link href="/auth/login">Already have an account? Login</Link>
-      </div>
     </div>
   );
 }

@@ -68,16 +68,16 @@ export default function Login() {
           label="Password"
           type="password"
         />
+        <div class="pt-3 relative flex flex-col space-y-2">
+          <Button action="primary" disabled={status.isLoading} type="submit">
+            {status.isLoading && <Spinner />} Login
+          </Button>
+          {status.error !== "" && (
+            <div class="text-sm text-red-400">{status.error}</div>
+          )}
+          <Link href="/auth/register">Don't have an account? Register.</Link>
+        </div>
       </form>
-      <div class="w-2/3 md:w-1/2 pt-3 relative">
-        <Button action="primary" disabled={status.isLoading} type="submit">
-          {status.isLoading && <Spinner />} Login
-        </Button>
-        {status.error !== "" && (
-          <div class="text-sm text-red-400">{status.error}</div>
-        )}
-        <Link href="/auth/register">Don't have an account? Register</Link>
-      </div>
     </div>
   );
 }

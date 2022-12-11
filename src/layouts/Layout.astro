@@ -28,25 +28,29 @@ const user = await getUser(Astro.request);
   </head>
   <body class="w-full min-h-full font-montserrat text-charcoal">
     <header
-      class="w-full flex flex-row items-center p-4 border-b border-gray-200 mb-8"
+      class="w-full flex flex-col md:flex-row justify-center items-center p-4 md:px-8 border-b border-gray-200 mb-8"
     >
-      <img src="/favicon.svg" class="h-16 w-16" />
-      <a href="/"><h1 class="ml-6 font-bold text-3xl">Pigeon Mail</h1></a>
-      <div class="flex-grow"></div>
+      <a href="/">
+        <div class="flex flex-row items-center">
+          <img src="/favicon.svg" class="h-16 w-16" />
+          <h1 class="ml-6 font-bold text-3xl">Pigeon Mail</h1>
+        </div>
+      </a>
+      <div class="flex-grow py-3"></div>
       {
         user ? (
-          <>
-            <a href="/profile" class="flex flex-row items-center">
-              <a href="/chat">
-                <Button action="primary">
+          <div class="flex flex-row items-center">
+            <a href="/chat">
+              <Button action="primary">
+                <p class="font-bold">
                   Hi {user.data.name}, ready to make a friend?
-                </Button>
-              </a>
-              <a href="/profile">
-                <img src={user.data.avatar} class="pl-4 h-12 w-12" />
-              </a>
+                </p>
+              </Button>
             </a>
-          </>
+            <a href="/profile">
+              <img src={user.data.avatar} class="pl-4 h-16 w-16" />
+            </a>
+          </div>
         ) : (
           <a href="/auth/login">
             <img src="/icons/log-in.svg" class="h-8 w-8" />
@@ -55,7 +59,7 @@ const user = await getUser(Astro.request);
       }
     </header>
     <slot />
-    <footer class="mt-16 mb-2 w-full text-center">
+    <footer class="mt-8 mb-2 w-full text-center">
       &copy Built by Jamalam for a Supabase Hackathon
     </footer>
   </body>

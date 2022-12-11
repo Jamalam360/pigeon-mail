@@ -138,7 +138,7 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
 
   return (
     <div class="w-full flex flex-col justify-center items-center">
-      <div class="w-2/3 flex flex-col items-center justify-center">
+      <div class="w-4/5 md:w-2/3 flex flex-col items-center justify-center">
         <h2 class="text-3xl text-center mb-6">
           Today you're chatting with{" "}
           <strong class="font-bold">{penPal?.name}</strong> from{" "}
@@ -246,7 +246,7 @@ function Countdown({
     return () => clearInterval(interval);
   }, [date]);
 
-  return <h2 class="font-bold text-5xl">{countdown}</h2>;
+  return <h2 class="font-bold text-3xl md:text-5xl">{countdown}</h2>;
 }
 
 function ClosedEnvelope({
@@ -261,15 +261,17 @@ function ClosedEnvelope({
   onCountdownCompleted: () => void;
 }) {
   return (
-    <div class="w-4/5 h-80 p-6 rounded-lg bg-gray-100 border border-gray-50 flex flex-col items-center justify-between">
-      <div class="w-full flex items-center justify-between">
+    <div class="w-full md:w-4/5 h-80 p-6 rounded-lg bg-gray-100 border border-gray-50 flex flex-col items-center justify-between">
+      <div class="w-full flex space-y-4 flex-col md:flex-row items-center justify-between">
         <img
           src={`https://countryflagsapi.com/svg/${sender.country}`}
-          class="h-10"
+          class="h-8 md:h-10 rotate-6"
         />
-        <p>Express Delivery</p>
+        <span class="flex flex-row bg-slate-400 rounded p-2 -rotate-1">
+          Express <img src="/favicon.svg" class="w-6 mx-2" /> Delivery
+        </span>
       </div>
-      <div class="w-2/3 h-40 pt-12 text-xl flex flex-col">
+      <div class="w-2/3 h-40 pt-12 text-2xl md:text-3xl flex flex-col">
         <p>{recipient.name},</p>
         <p>{recipient.country}</p>
       </div>
@@ -293,7 +295,7 @@ function MailHeader({ sender }: { sender: PigeonMailUser["data"] }) {
           class="h-10"
         />
       </div>
-      <p class="italic">From the office of {sender.name}.</p>
+      <p class="italic">{sender.name}</p>
     </div>
   );
 }
