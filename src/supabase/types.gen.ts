@@ -513,53 +513,53 @@ export interface Database {
       messages: {
         Row: {
           id: number;
-          sent_at: string | null;
-          delivery_time: number | null;
-          sender: string | null;
-          recipient: string | null;
-          content: string | null;
+          sent_at: string;
+          delivery_time: number;
+          sender: string;
+          recipient: string;
+          content: string;
         };
         Insert: {
           id?: number;
-          sent_at?: string | null;
-          delivery_time?: number | null;
-          sender?: string | null;
-          recipient?: string | null;
-          content?: string | null;
+          sent_at?: string;
+          delivery_time: number;
+          sender: string;
+          recipient: string;
+          content: string;
         };
         Update: {
           id?: number;
-          sent_at?: string | null;
-          delivery_time?: number | null;
-          sender?: string | null;
-          recipient?: string | null;
-          content?: string | null;
+          sent_at?: string;
+          delivery_time?: number;
+          sender?: string;
+          recipient?: string;
+          content?: string;
         };
       };
       users: {
         Row: {
           id: string;
-          country: string | null;
-          name: string | null;
+          country: string;
+          name: string;
           pen_pal: string | null;
           searching_today: boolean;
-          avatar: string | null;
+          avatar: string;
         };
         Insert: {
           id: string;
-          country?: string | null;
-          name?: string | null;
+          country: string;
+          name: string;
           pen_pal?: string | null;
           searching_today?: boolean;
-          avatar?: string | null;
+          avatar: string;
         };
         Update: {
           id?: string;
-          country?: string | null;
-          name?: string | null;
+          country?: string;
+          name?: string;
           pen_pal?: string | null;
           searching_today?: boolean;
-          avatar?: string | null;
+          avatar?: string;
         };
       };
     };

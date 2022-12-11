@@ -13,7 +13,9 @@ export default function Login() {
     isLoading: false,
   });
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: Event) => {
+    e.preventDefault();
+
     setStatus({ error: "", isLoading: true });
 
     const { error, data } = await supabase.auth.signInWithPassword({
@@ -32,7 +34,7 @@ export default function Login() {
       }),
     });
 
-    if (!res.ok || error?.message) {
+    if (!res.ok || error != null) {
       setStatus(() => ({
         error: error?.message ?? "Failed to login",
         success: false,
@@ -47,7 +49,7 @@ export default function Login() {
   return (
     <div class="w-full flex flex-col items-center justify-center">
       <h1 class="text-3xl text-center pb-4">Login</h1>
-      <div class="w-2/3 md:w-1/2 space-y-2">
+      <form onSubmit={handleLogin} class="w-2/3 md:w-1/2 space-y-2">
         <Input
           disabled={status.isLoading}
           id="email"
@@ -66,16 +68,14 @@ export default function Login() {
           label="Password"
           type="password"
         />
-      </div>
+      </form>
       <div class="w-2/3 md:w-1/2 pt-3 relative">
-        <Button
-          action="primary"
-          disabled={status.isLoading}
-          onClick={handleLogin}
-        >
+        <Button action="primary" disabled={status.isLoading} type="submit">
           {status.isLoading && <Spinner />} Login
         </Button>
-        {status.error && <div class="text-sm text-red-400">{status.error}</div>}
+        {status.error !== "" && (
+          <div class="text-sm text-red-400">{status.error}</div>
+        )}
         <Link href="/auth/register">Don't have an account? Register</Link>
       </div>
     </div>

@@ -1,12 +1,12 @@
 import countries from "./data/countries_by_coords.json";
 
-type Country = {
+interface Country {
   country: string;
   north: number | null;
   south: number | null;
   east: number | null;
   west: number | null;
-};
+}
 
 // Our pigeons travel fast!
 const SPEED = 10_000;
@@ -37,8 +37,7 @@ export function calculateDeliveryTime(
     (country) => country.country === recipient
   ) as Country;
 
-  // return calculateDistance(senderCoords, recipientCoords) / SPEED;
-  return 1 / 60;
+  return calculateDistance(senderCoords, recipientCoords) / SPEED;
 }
 
 function degreesToRadians(degrees: number): number {

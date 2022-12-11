@@ -19,7 +19,9 @@ export default function Login() {
     isLoading: false,
   });
 
-  const handleRegister = async () => {
+  const handleRegister = async (e: Event) => {
+    e.preventDefault();
+
     setStatus({ error: "", isLoading: true });
 
     if (password !== passwordConfirmation) {
@@ -42,9 +44,16 @@ export default function Login() {
       password,
     });
 
-    if (error?.message) {
+    if (error != null) {
       setStatus(() => ({
         error: error.message,
+        success: false,
+        isLoading: false,
+      }));
+      return;
+    } else if (data.user == null) {
+      setStatus(() => ({
+        error: "Something went wrong",
         success: false,
         isLoading: false,
       }));
@@ -60,7 +69,7 @@ export default function Login() {
       )}`,
     });
 
-    if (iError?.message) {
+    if (iError != null) {
       setStatus(() => ({
         error: iError.message,
         success: false,
@@ -87,7 +96,7 @@ export default function Login() {
   return (
     <div class="w-full flex flex-col items-center justify-center">
       <h1 class="text-3xl text-center pb-4">Register</h1>
-      <div class="w-2/3 md:w-1/2 space-y-2">
+      <form onSubmit={handleRegister} class="w-2/3 md:w-1/2 space-y-2">
         <Input
           disabled={status.isLoading}
           id="email"
@@ -132,18 +141,18 @@ export default function Login() {
           id="country"
           onChange={(e) => setCountry((e.target as HTMLOptionElement).value)}
           label="Country"
-          values={countries.map((e) => e.country.startsWith("the") ? "T" + e.country.slice(1) : e.country)}
+          values={countries.map((e) =>
+            e.country.startsWith("the") ? "T" + e.country.slice(1) : e.country
+          )}
         />
-      </div>
+      </form>
       <div class="w-2/3 md:w-1/2 pt-3 relative">
-        <Button
-          action="primary"
-          disabled={status.isLoading}
-          onClick={handleRegister}
-        >
+        <Button action="primary" disabled={status.isLoading} type="submit">
           {status.isLoading && <Spinner />} Register
         </Button>
-        {status.error && <div class="text-sm text-red-400">{status.error}</div>}
+        {status.error !== "" && (
+          <div class="text-sm text-red-400">{status.error}</div>
+        )}
         <Link href="/auth/login">Already have an account? Login</Link>
       </div>
     </div>

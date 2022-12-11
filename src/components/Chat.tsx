@@ -1,4 +1,3 @@
-import { timerMessage } from "astro/dist/core/logger/core";
 import { StateUpdater, useEffect, useState } from "preact/hooks";
 import { calculateDeliveryTime, getCountdownString } from "../delivery";
 import { PigeonMailUser, supabase } from "../supabase/supabase";
@@ -20,7 +19,9 @@ export default function Chat({
         "postgres_changes",
         { event: "*", schema: "public", table: "users" },
         (payload) => {
-          if (payload.new["id"] === user.id) {
+          const n = payload.new as PigeonMailUser["data"];
+
+          if (n.id === user.id) {
             setUser(payload.new as PigeonMailUser["data"]);
           }
         }
@@ -34,7 +35,7 @@ export default function Chat({
 
   return (
     <div class="w-full flex justify-center items-center">
-      {user.pen_pal ? (
+      {user.pen_pal !== "" ? (
         <ChatScreen user={user} />
       ) : (
         <SearchScreen user={user} setUser={setUser} />
@@ -58,7 +59,7 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
         .select("*")
         .eq("id", user.pen_pal);
 
-      if (error) {
+      if (error != null) {
         console.error(error);
         return;
       }
@@ -74,7 +75,7 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
         .order("sent_at", { ascending: false })
         .limit(1);
 
-      if (messageError) {
+      if (messageError != null) {
         console.error(messageError);
         return;
       }
@@ -126,7 +127,7 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
       setState({
         message,
         turn,
-        deliveryDate: message ? getTimeOfDelivery(message) : null,
+        deliveryDate: getTimeOfDelivery(message),
       });
 
       return () => {
@@ -143,10 +144,10 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
           <strong class="font-bold">{penPal?.name}</strong> from{" "}
           <strong class="font-bold">{penPal?.country}</strong>!
         </h2>
-        {!state && <Spinner />}
+        {state == null && <Spinner />}
 
         {/* No messages have been sent yet */}
-        {state && !state.message && (
+        {state != null && state.message == null && penPal != null && (
           <p>
             {state.turn === "user"
               ? "Ready to send the first message?"
@@ -155,31 +156,43 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
         )}
 
         {/* Message is in transit */}
-        {state && state.deliveryDate && state.turn === "waiting" && (
-          <ClosedEnvelope
-            sender={state.message.sender === user.id ? user : penPal}
-            recipient={state.message.sender === user.id ? penPal : user}
-            message={state.message}
-            onCountdownCompleted={() => {
-              setState((state) => ({
-                ...state,
-                turn: "user",
-              }));
-            }}
-          />
-        )}
+        {state?.deliveryDate != null &&
+          state?.message != null &&
+          state.turn === "waiting" && (
+            <ClosedEnvelope
+              sender={
+                (state.message.sender === user.id
+                  ? user
+                  : penPal) as PigeonMailUser["data"]
+              }
+              recipient={
+                (state.message.sender === user.id
+                  ? penPal
+                  : user) as PigeonMailUser["data"]
+              }
+              message={state.message}
+              onCountdownCompleted={() => {
+                setState(
+                  (state) =>
+                    ({
+                      ...state,
+                      turn: "user",
+                    } as any)
+                );
+              }}
+            />
+          )}
 
         {/* Message received */}
-        {state &&
-          state.message &&
+        {state?.message != null &&
+          penPal != null &&
           state.turn !== "waiting" &&
           state.message.sender === penPal.id && (
             <Message content={state.message.content} sender={penPal} />
           )}
 
         {/* Message sent, and has been received by the pen pal */}
-        {state &&
-          state.message &&
+        {state?.message != null &&
           state.message.sender === user.id &&
           state.turn !== "waiting" && (
             <p>
@@ -189,8 +202,8 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
           )}
 
         {/* Sending a message */}
-        {state &&
-          state.message &&
+        {state?.message != null &&
+          penPal != null &&
           state.turn !== "waiting" &&
           state.message.recipient === user.id && (
             <div class="pt-4 w-full flex items-center justify-center">
@@ -324,7 +337,7 @@ function SendMailScreen({
       delivery_time: calculateDeliveryTime(user.country, penPal.country),
     });
 
-    if (error) {
+    if (error != null) {
       console.error(error.message);
       setLoading(false);
       return;
@@ -370,7 +383,7 @@ function SearchScreen({
       })
       .eq("id", user.id);
 
-    if (error) {
+    if (error != null) {
       console.error(error.message);
       return;
     }
@@ -381,14 +394,18 @@ function SearchScreen({
   useEffect(() => {
     (async () => {
       if (searching) {
-        const searchingUsers = await supabase
+        const { data } = await supabase
           .from("users")
           .select("id")
           .eq("searching_today", true)
           .neq("id", user.id);
 
-        const selected =
-          searchingUsers.data[Math.floor(Math.random() * searchingUsers.count)];
+        if (data == null) {
+          await handleChangeSearchState(false);
+          return;
+        }
+
+        const selected = data[Math.floor(Math.random() * data.length)];
 
         await Promise.all([
           supabase
@@ -413,7 +430,7 @@ function SearchScreen({
           .eq("id", user.id)
           .limit(1)
           .single()
-          .then(({ data }) => setUser(data));
+          .then(({ data }) => setUser(data as PigeonMailUser["data"]));
       }
     })().then(() => {});
   }, [searching]);
@@ -428,7 +445,7 @@ function SearchScreen({
           <div class="w-2/5 pt-6">
             <Button
               action="primary"
-              onClick={() => handleChangeSearchState(true)}
+              onClick={async () => await handleChangeSearchState(true)}
             >
               Start Searching
             </Button>
@@ -446,7 +463,7 @@ function SearchScreen({
           <div class="w-2/5 pt-6">
             <Button
               action="danger"
-              onClick={() => handleChangeSearchState(false)}
+              onClick={async () => await handleChangeSearchState(false)}
             >
               Stop Searching
             </Button>

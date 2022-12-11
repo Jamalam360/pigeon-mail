@@ -7,15 +7,15 @@ export const supabase = createClient<Database>(
   import.meta.env.PUBLIC_SUPABASE_KEY
 );
 
-export type PigeonMailUser = {
+export interface PigeonMailUser {
   auth: User;
   data: Database["public"]["Tables"]["users"]["Row"];
-};
+}
 
 export async function getUser(req: Request): Promise<PigeonMailUser | null> {
   const c = cookie.parse(req.headers.get("cookie") ?? "");
 
-  if (!c.sbat && !c.sbrt) {
+  if (c.sbat == null) {
     return null;
   }
 
@@ -23,8 +23,8 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
     data: { user },
   } = await supabase.auth.getUser(c.sbat);
 
-  if (!user || user.role !== "authenticated") {
-    if (!c.sbrt) {
+  if (user == null || user.role !== "authenticated") {
+    if (c.sbrt == null) {
       return null;
     }
 
@@ -33,7 +33,7 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
       error,
     } = await supabase.auth.refreshSession({ refresh_token: c.sbrt });
 
-    if (!session || error?.message) {
+    if (session == null || error != null) {
       return null;
     }
 
@@ -62,7 +62,7 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
     .limit(1)
     .single();
 
-  if (error) {
+  if (error != null) {
     console.error(error);
     return null;
   }
@@ -73,6 +73,6 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
   };
 }
 
-export async function isLoggedIn(req: Request) {
+export async function isLoggedIn(req: Request): Promise<boolean> {
   return (await getUser(req)) !== null;
 }
