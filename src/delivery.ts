@@ -23,11 +23,13 @@ export function getCountdownString(deliveryTime: Date): string {
   const minutes = Math.floor((diff / 1000 / 60) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
-
   return `${hours}h ${minutes}m ${seconds}s`;
 }
 
-export function calculateDeliveryTime(sender: string, recipient: string): number {
+export function calculateDeliveryTime(
+  sender: string,
+  recipient: string
+): number {
   const senderCoords = countries.find(
     (country) => country.country === sender
   ) as Country;

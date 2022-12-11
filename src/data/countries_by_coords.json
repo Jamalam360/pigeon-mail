@@ -210,7 +210,7 @@
     "east": -32.393
   },
   {
-    "country": "British Indian Ocean Territory",
+    "country": "the British Indian Ocean Territory",
     "north": -5.26833,
     "south": -7.43803,
     "west": 71.26,
@@ -273,14 +273,14 @@
     "east": -22.6694
   },
   {
-    "country": "Cayman Islands",
+    "country": "the Cayman Islands",
     "north": 19.7617,
     "south": 19.263,
     "west": -81.4328,
     "east": -79.7273
   },
   {
-    "country": "Central African Republic",
+    "country": "the Central African Republic",
     "north": 11.0076,
     "south": 2.22051,
     "west": 14.4201,
@@ -315,7 +315,7 @@
     "east": 105.713
   },
   {
-    "country": "Cocos (Keeling) Islands",
+    "country": "the Cocos (Keeling) Islands",
     "north": null,
     "south": null,
     "west": null,
@@ -343,7 +343,14 @@
     "east": null
   },
   {
-    "country": "Cook Islands",
+    "country": "the Ivory Coast",
+    "north": 10.7366,
+    "south": 4.35707,
+    "west": -8.5993,
+    "east": -2.4949
+  },
+  {
+    "country": "the Cook Islands",
     "north": -10.0231,
     "south": -21.9442,
     "west": -161.094,
@@ -378,7 +385,7 @@
     "east": 34.5979
   },
   {
-    "country": "Czech Republic",
+    "country": "the Czech Republic",
     "north": 51.0589,
     "south": 48.5429,
     "west": 12.0962,
@@ -406,7 +413,7 @@
     "east": -61.2442
   },
   {
-    "country": "Dominican Republic",
+    "country": "the Dominican Republic",
     "north": 19.9299,
     "south": 17.5432,
     "west": -72.0035,
@@ -476,21 +483,21 @@
     "east": 47.9862
   },
   {
-    "country": "Falkland Islands",
+    "country": "the Falkland Islands",
     "north": -51.2407,
     "south": -52.3605,
     "west": -61.3452,
     "east": -57.7125
   },
   {
-    "country": "Faroe Islands",
+    "country": "the Faroe Islands",
     "north": 62.4007,
     "south": 61.3949,
     "west": -7.458,
     "east": -6.39958
   },
   {
-    "country": "Fiji Islands",
+    "country": "the Fiji Islands",
     "north": null,
     "south": null,
     "west": null,
@@ -525,7 +532,7 @@
     "east": -134.93
   },
   {
-    "country": "French Southern territories",
+    "country": "the French Southern territories",
     "north": -37.7907,
     "south": -49.7352,
     "west": 50.1703,
@@ -644,14 +651,14 @@
     "east": -71.6134
   },
   {
-    "country": "Heard Island and McDonald Islands",
+    "country": "Heard Island and the McDonald Islands",
     "north": -52.9094,
     "south": -53.192,
     "west": 72.5965,
     "east": 73.8591
   },
   {
-    "country": "Holy See (Vatican City State)",
+    "country": "the Vatican City",
     "north": null,
     "south": null,
     "west": null,
@@ -733,13 +740,6 @@
     "south": 36.6528,
     "west": 6.61489,
     "east": 18.5134
-  },
-  {
-    "country": "Ivory Coast",
-    "north": 10.7366,
-    "south": 4.35707,
-    "west": -8.5993,
-    "east": -2.4949
   },
   {
     "country": "Jamaica",
@@ -896,7 +896,7 @@
     "east": 119.268
   },
   {
-    "country": "Maldives",
+    "country": "the Maldives",
     "north": 7.09159,
     "south": -0.692694,
     "west": 72.6932,
@@ -917,7 +917,7 @@
     "east": 14.5765
   },
   {
-    "country": "Marshall Islands",
+    "country": "the Marshall Islands",
     "north": 14.62,
     "south": 5.58764,
     "west": 165.525,
@@ -1120,7 +1120,7 @@
     "east": null
   },
   {
-    "country": "Northern Mariana Islands",
+    "country": "the Northern Mariana Islands",
     "north": 20.5534,
     "south": 14.1102,
     "west": 144.886,
@@ -1246,7 +1246,7 @@
     "east": 29.6911
   },
   {
-    "country": "Russian Federation",
+    "country": "the Russian Federation",
     "north": null,
     "south": null,
     "west": null,
@@ -1344,7 +1344,7 @@
     "east": 21.0059
   },
   {
-    "country": "Seychelles",
+    "country": "the Seychelles",
     "north": -4.28372,
     "south": -9.75387,
     "west": 46.2048,
@@ -1379,7 +1379,7 @@
     "east": 16.6106
   },
   {
-    "country": "Solomon Islands",
+    "country": "the Solomon Islands",
     "north": -6.58961,
     "south": -11.8506,
     "west": 155.509,
@@ -1400,7 +1400,7 @@
     "east": 32.896
   },
   {
-    "country": "South Georgia and the South Sandwich Islands",
+    "country": "the South Georgia and the South Sandwich Islands",
     "north": -53.9705,
     "south": -59.4793,
     "west": -38.0212,
@@ -1589,28 +1589,28 @@
     "east": 40.2074
   },
   {
-    "country": "United Arab Emirates",
+    "country": "the United Arab Emirates",
     "north": 26.0842,
     "south": 22.6333,
     "west": 51.5833,
     "east": 56.3817
   },
   {
-    "country": "United Kingdom",
+    "country": "the United Kingdom",
     "north": 59.3602,
     "south": 49.9062,
     "west": -8.62356,
     "east": 1.759
   },
   {
-    "country": "United States",
+    "country": "the United States",
     "north": 49.3886,
     "south": 24.5442,
     "west": -124.733,
     "east": -66.9548
   },
   {
-    "country": "United States Minor Outlying Islands",
+    "country": "the United States Minor Outlying Islands",
     "north": null,
     "south": null,
     "west": null,
@@ -1652,14 +1652,14 @@
     "east": 109.465
   },
   {
-    "country": "Virgin Islands, British",
+    "country": "the Virgin Islands, British",
     "north": null,
     "south": null,
     "west": null,
     "east": null
   },
   {
-    "country": "Virgin Islands, U.S.",
+    "country": "the Virgin Islands, U.S.",
     "north": null,
     "south": null,
     "west": null,

@@ -14,7 +14,8 @@ export default function Chat({
   const [user, setUser] = useState(pigeonMailUser.data);
 
   useEffect(() => {
-    const subscription = supabase.channel("custom-all-channel")
+    const subscription = supabase
+      .channel("custom-all-channel")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "users" },
@@ -22,7 +23,7 @@ export default function Chat({
           if (payload.new["id"] === user.id) {
             setUser(payload.new as PigeonMailUser["data"]);
           }
-        },
+        }
       )
       .subscribe();
 
@@ -33,9 +34,11 @@ export default function Chat({
 
   return (
     <div class="w-full flex justify-center items-center">
-      {user.pen_pal
-        ? <ChatScreen user={user} />
-        : <SearchScreen user={user} setUser={setUser} />}
+      {user.pen_pal ? (
+        <ChatScreen user={user} />
+      ) : (
+        <SearchScreen user={user} setUser={setUser} />
+      )}
     </div>
   );
 }
@@ -66,59 +69,57 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
         .from("messages")
         .select("*")
         .or(
-          `sender.eq.${user.id},recipient.eq.${user.id},sender.eq.${
-            data[0].id
-          },recipient.eq.${data[0].id}`,
+          `sender.eq.${user.id},recipient.eq.${user.id},sender.eq.${data[0].id},recipient.eq.${data[0].id}`
         )
         .order("sent_at", { ascending: false })
         .limit(1);
-      
+
       if (messageError) {
         console.error(messageError);
         return;
       }
 
       const message = messages[0] ?? null;
-        
+
       let turn;
 
       console.log(message);
-      
+
       if (message === null) {
         turn = user.id > data[0].id ? "user" : "pen_pal";
       } else {
-        if (
-          new Date().getTime() >
-            getTimeOfDelivery(message).getTime()
-        ) {
+        if (new Date().getTime() > getTimeOfDelivery(message).getTime()) {
           turn = message.sender === user.id ? "pen_pal" : "user";
         } else {
           turn = "waiting";
         }
       }
 
-      const subscription = supabase.channel("ChatScreenMessages")
+      const subscription = supabase
+        .channel("ChatScreenMessages")
         .on(
           "postgres_changes",
           { event: "*", schema: "public", table: "messages" },
           (payload) => {
-            const n = payload
-              .new as Database["public"]["Tables"]["messages"]["Row"];
+            const n =
+              payload.new as Database["public"]["Tables"]["messages"]["Row"];
 
-            if (
-              n.recipient === user.id ||
-              n.sender === user.id
-            ) {
+            if (n.recipient === user.id || n.sender === user.id) {
               const deliveryDate = getTimeOfDelivery(n);
 
               setState((state) => ({
                 ...state,
                 message: n,
-                turn: new Date().getTime() > deliveryDate.getTime() ? (n.sender === user.id ? "pen_pal" : "user") : "waiting",
+                turn:
+                  new Date().getTime() > deliveryDate.getTime()
+                    ? n.sender === user.id
+                      ? "pen_pal"
+                      : "user"
+                    : "waiting",
                 deliveryDate,
               }));
             }
-          },
+          }
         )
         .subscribe();
 
@@ -157,10 +158,7 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
         {state && state.deliveryDate && state.turn === "waiting" && (
           <ClosedEnvelope
             sender={state.message.sender === user.id ? user : penPal}
-            recipient={state.message.sender ===
-                user.id
-              ? penPal
-              : user}
+            recipient={state.message.sender === user.id ? penPal : user}
             message={state.message}
             onCountdownCompleted={() => {
               setState((state) => ({
@@ -172,46 +170,55 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
         )}
 
         {/* Message received */}
-        {state && state.message && state.turn !== "waiting" && state.message.sender === penPal.id && (
-          <Message
-            content={state.message.content}
-            sender={penPal}
-          />
-        )}
+        {state &&
+          state.message &&
+          state.turn !== "waiting" &&
+          state.message.sender === penPal.id && (
+            <Message content={state.message.content} sender={penPal} />
+          )}
 
         {/* Message sent, and has been received by the pen pal */}
-        {state && state.message && state.message.sender === user.id && state.turn !== "waiting" && (
-          <p>
-            {penPal?.name}{" "}
-            has received your message! Remember to check back later to see their
-            reply!
-          </p>
-        )}
+        {state &&
+          state.message &&
+          state.message.sender === user.id &&
+          state.turn !== "waiting" && (
+            <p>
+              {penPal?.name} has received your message! Remember to check back
+              later to see their reply!
+            </p>
+          )}
 
         {/* Sending a message */}
-        {state && state.message && state.turn !== "waiting" && state.message.recipient === user.id && (
-          <div class="pt-4 w-full flex items-center justify-center">
-            <SendMailScreen user={user} penPal={penPal} />
-          </div>
-        )}
+        {state &&
+          state.message &&
+          state.turn !== "waiting" &&
+          state.message.recipient === user.id && (
+            <div class="pt-4 w-full flex items-center justify-center">
+              <SendMailScreen user={user} penPal={penPal} />
+            </div>
+          )}
       </div>
     </div>
   );
 }
 
 function getTimeOfDelivery(
-  message: Database["public"]["Tables"]["messages"]["Row"],
+  message: Database["public"]["Tables"]["messages"]["Row"]
 ) {
   const deliveryDate = new Date(message.sent_at);
   deliveryDate.setTime(
-    deliveryDate.getTime() + message.delivery_time * 60 * 60 * 1000,
+    deliveryDate.getTime() + message.delivery_time * 60 * 60 * 1000
   );
   return deliveryDate;
 }
 
-function Countdown(
-  { date, onCompleted }: { date: Date; onCompleted: () => void },
-) {
+function Countdown({
+  date,
+  onCompleted,
+}: {
+  date: Date;
+  onCompleted: () => void;
+}) {
   const [countdown, setCountdown] = useState(getCountdownString(date));
 
   useEffect(() => {
@@ -229,14 +236,17 @@ function Countdown(
   return <h2 class="font-bold text-5xl">{countdown}</h2>;
 }
 
-function ClosedEnvelope(
-  { message, recipient, sender, onCountdownCompleted }: {
-    message: Database["public"]["Tables"]["messages"]["Row"];
-    recipient: PigeonMailUser["data"];
-    sender: PigeonMailUser["data"];
-    onCountdownCompleted: () => void;
-  },
-) {
+function ClosedEnvelope({
+  message,
+  recipient,
+  sender,
+  onCountdownCompleted,
+}: {
+  message: Database["public"]["Tables"]["messages"]["Row"];
+  recipient: PigeonMailUser["data"];
+  sender: PigeonMailUser["data"];
+  onCountdownCompleted: () => void;
+}) {
   return (
     <div class="w-4/5 h-80 p-6 rounded-lg bg-gray-100 border border-gray-50 flex flex-col items-center justify-between">
       <div class="w-full flex items-center justify-between">
@@ -275,9 +285,13 @@ function MailHeader({ sender }: { sender: PigeonMailUser["data"] }) {
   );
 }
 
-function Message(
-  { content, sender }: { content: string; sender: PigeonMailUser["data"] },
-) {
+function Message({
+  content,
+  sender,
+}: {
+  content: string;
+  sender: PigeonMailUser["data"];
+}) {
   return (
     <div class="w-4/5 px-6 py-3 bg-gray-50 rounded border border-gray-100">
       <MailHeader sender={sender} />
@@ -303,16 +317,12 @@ function SendMailScreen({
 
     setLoading(true);
 
-    const { error } = await supabase
-      .from("messages")
-      .insert(
-        {
-          sender: user.id,
-          recipient: penPal.id,
-          content,
-          delivery_time: calculateDeliveryTime(user.country, penPal.country),
-        },
-      );
+    const { error } = await supabase.from("messages").insert({
+      sender: user.id,
+      recipient: penPal.id,
+      content,
+      delivery_time: calculateDeliveryTime(user.country, penPal.country),
+    });
 
     if (error) {
       console.error(error.message);
