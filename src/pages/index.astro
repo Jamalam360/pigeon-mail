@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Register from "../components/auth/Register";
+import Button from "../components/shared/Button";
 ---
 
 <Layout title="Pigeon Mail">
@@ -28,7 +28,7 @@ import Register from "../components/auth/Register";
         </li>
       </ul>
 
-      <Register client:load />
+      <a href="/auth/register"><Button action="primary"><p class="font-bold">Register Today</p></Button></a>
 
       <ul class="flex flex-row pt-6">
         <li class="mr-4">
