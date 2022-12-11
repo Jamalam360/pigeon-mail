@@ -12,7 +12,22 @@ type Country = {
 const SPEED = 10_000;
 const EARTH_RADIUS = 6371;
 
-export function calculateDeliveryDate(sender: string, recipient: string): Date {
+export function getCountdownString(deliveryTime: Date): string {
+  const diff = deliveryTime.getTime() - new Date().getTime();
+
+  if (diff < 0) {
+    return "0h 0m 0s";
+  }
+
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / 1000 / 60) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+
+  return `${hours}h ${minutes}m ${seconds}s`;
+}
+
+export function calculateDeliveryTime(sender: string, recipient: string): number {
   const senderCoords = countries.find(
     (country) => country.country === sender
   ) as Country;
@@ -20,12 +35,8 @@ export function calculateDeliveryDate(sender: string, recipient: string): Date {
     (country) => country.country === recipient
   ) as Country;
 
-  const distance = calculateDistance(senderCoords, recipientCoords);
-  const deliveryHours = distance / SPEED;
-  const deliveryDate = new Date();
-  deliveryDate.setTime(deliveryDate.getTime() + deliveryHours * 60 * 60 * 1000);
-
-  return deliveryDate;
+  // return calculateDistance(senderCoords, recipientCoords) / SPEED;
+  return 1 / 60;
 }
 
 function degreesToRadians(degrees: number): number {
