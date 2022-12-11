@@ -132,7 +132,7 @@ export default function Login() {
           id="country"
           onChange={(e) => setCountry((e.target as HTMLOptionElement).value)}
           label="Country"
-          values={countries.map((e) => e.country)}
+          values={countries.map((e) => e.country.startsWith("the") ? "T" + e.country.slice(1) : e.country)}
         />
       </div>
       <div class="w-2/3 md:w-1/2 pt-3 relative">
