@@ -1,0 +1,30 @@
+---
+import Logout from "../components/auth/Logout";
+import Layout from "../layouts/Layout.astro";
+import { getUser } from "../supabase/supabase";
+
+const user = await getUser(Astro.request);
+
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
+---
+
+<Layout title="Profile | Pigeon Mail">
+  <main class="w-full flex flex-col items-center justify-center">
+    <div class="flex flex-row space-x-8 items-center justify-center">
+      <img class="w-20 h-20" src={user.data.avatar} />
+      <div class="flex flex-col pr-12">
+        <div class="flex flex-row items-center space-x-2">
+          <p class="text-2xl">{user.data.name}</p>
+          <img
+            src={`https://countryflagsapi.com/svg/${user.data.country}`}
+            class="h-4"
+          />
+        </div>
+        <p class="text-gray-400">{user.auth.email}</p>
+      </div>
+      <Logout client:load />
+    </div>
+  </main>
+</Layout>

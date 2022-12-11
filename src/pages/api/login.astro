@@ -1,0 +1,11 @@
+---
+const body = await Astro.request.json();
+Astro.response.headers.append(
+  "Set-Cookie",
+  `sbat=${body.access_token}; Path=/;`
+);
+Astro.response.headers.append(
+  "Set-Cookie",
+  `sbrt=${body.refresh_token}; Path=/;`
+);
+---

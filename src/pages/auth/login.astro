@@ -1,0 +1,13 @@
+---
+import Login from "../../components/auth/Login";
+import Layout from "../../layouts/Layout.astro";
+import { isLoggedIn } from "../../supabase/supabase";
+
+if (await isLoggedIn(Astro.request)) {
+  return Astro.redirect("/profile");
+}
+---
+
+<Layout title="Login | Pigeon Mail">
+  <Login client:load />
+</Layout>

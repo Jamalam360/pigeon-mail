@@ -1,0 +1,62 @@
+---
+import Button from "../components/shared/Button";
+import { getUser, isLoggedIn } from "../supabase/supabase";
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const user = await getUser(Astro.request);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      href="https://fonts.bunny.net/css?family=montserrat:400,600,700"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="w-full min-h-full font-montserrat text-charcoal">
+    <header
+      class="w-full flex flex-row items-center p-4 border-b border-gray-200 mb-8"
+    >
+      <img src="/favicon.svg" class="h-16 w-16" />
+      <a href="/"><h1 class="ml-6 font-bold text-3xl">Pigeon Mail</h1></a>
+      <div class="flex-grow"></div>
+      {
+        user ? (
+          <>
+            <a href="/profile" class="flex flex-row items-center">
+              <a href="/chat">
+                <Button action="primary">
+                  Hi {user.data.name}, ready to make a friend?
+                </Button>
+              </a>
+              <a href="/profile">
+                <img src={user.data.avatar} class="pl-4 h-12 w-12" />
+              </a>
+            </a>
+          </>
+        ) : (
+          <a href="/auth/login">
+            <img src="/icons/log-in.svg" class="h-8 w-8" />
+          </a>
+        )
+      }
+    </header>
+    <slot />
+    <footer class="mt-16 mb-2 w-full text-center">
+      &copy Built by Jamalam for a Supabase Hackathon
+    </footer>
+  </body>
+</html>

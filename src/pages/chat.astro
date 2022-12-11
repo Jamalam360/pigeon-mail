@@ -1,0 +1,15 @@
+---
+import Chat from "../components/Chat";
+import Layout from "../layouts/Layout.astro";
+import { getUser } from "../supabase/supabase";
+
+const user = await getUser(Astro.request);
+
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
+---
+
+<Layout title="Chat | Pigeon Mail">
+  <Chat user={user} client:load />
+</Layout>
