@@ -42,6 +42,9 @@ export default function Login() {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: "http://localhost:3000/auth/confirm-email",
+      },
     });
 
     if (error != null) {
@@ -78,19 +81,8 @@ export default function Login() {
       return;
     }
 
-    await fetch("/api/login", {
-      method: "POST",
-      headers: new Headers({ "Content-Type": "application/json" }),
-      credentials: "same-origin",
-      body: JSON.stringify({
-        access_token: data.session?.access_token,
-        expires_in: data.session?.expires_in,
-        refresh_token: data.session?.refresh_token,
-      }),
-    });
-
     setStatus({ error: "", isLoading: false });
-    window.location.href = "/";
+    window.location.href = "/auth/please-confirm-email";
   };
 
   return (
@@ -147,12 +139,12 @@ export default function Login() {
         />
         <div class="pt-3 relative flex flex-col space-y-2">
           <Button action="primary" disabled={status.isLoading} type="submit">
-            {status.isLoading && <Spinner />} Register
+            {status.isLoading && <Spinner class="ml-4" />} Register
           </Button>
           {status.error !== "" && (
             <div class="text-sm text-red-400">{status.error}</div>
           )}
-          <Link href="/auth/login">Already have an account? Login</Link>
+          <Link href="/auth/login">Already have an account?</Link>
         </div>
       </form>
     </div>

@@ -9,7 +9,7 @@ export default function Dropdown(props: {
     <div class="flex flex-col w-full">
       <label for={props.id}>{props.label}</label>
       <select
-        class="p-2 border rounded bg-white text-gray-700 focus:outline-none focus:shadow-outline"
+        class="p-2 border rounded bg-white disabled:bg-[#EBEBE4] text-gray-700 focus:outline-none focus:shadow-outline"
         name={props.id}
         id={props.id}
         disabled={props.disabled}

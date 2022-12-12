@@ -1,3 +1,4 @@
+import { supabase } from "../../supabase/supabase";
 import Button from "../shared/Button";
 
 export default function Logout() {
@@ -6,6 +7,8 @@ export default function Logout() {
       method: "POST",
       credentials: "same-origin",
     });
+
+    await supabase.auth.signOut();
 
     window.location.href = "/";
   };

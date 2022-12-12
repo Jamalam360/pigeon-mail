@@ -20,7 +20,13 @@ if (!user) {
           alt="avatar"
         />
         <div class="flex flex-col">
-          <h2 class="flex flex-row text-xl font-bold">{user.data.name} <img src={`https://countryflagsapi.com/svg/${user.data.country}`} class="w-8 ml-2" /></h2>
+          <h2 class="flex flex-row text-xl font-bold">
+            {user.data.name}
+            <img
+              src={`https://countryflagsapi.com/svg/${user.data.country}`}
+              class="w-8 ml-2"
+            />
+          </h2>
           <h1 class="text-lg">{user.auth.email}</h1>
         </div>
       </div>

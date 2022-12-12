@@ -70,12 +70,12 @@ export default function Login() {
         />
         <div class="pt-3 relative flex flex-col space-y-2">
           <Button action="primary" disabled={status.isLoading} type="submit">
-            {status.isLoading && <Spinner />} Login
+            {status.isLoading && <Spinner class="ml-4" />} Login
           </Button>
           {status.error !== "" && (
             <div class="text-sm text-red-400">{status.error}</div>
           )}
-          <Link href="/auth/register">Don't have an account? Register.</Link>
+          <Link href="/auth/register">Don't have an account?</Link>
         </div>
       </form>
     </div>
