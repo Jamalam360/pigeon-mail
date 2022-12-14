@@ -65,7 +65,7 @@ export default function Login() {
 
     const { error: iError } = await supabase.from("users").insert({
       id: data.user.id,
-      country,
+      country: country.startsWith("The") ? "t" + country.slice(1) : country,
       name,
       avatar: `https://source.boringavatars.com/beam/120/${name}?colors=${colors.join(
         ","

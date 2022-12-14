@@ -39,6 +39,7 @@ export default function ConfirmEmail() {
         });
     } else {
       console.error("No token found");
+      window.location.href = "/";
     }
   }, []);
 

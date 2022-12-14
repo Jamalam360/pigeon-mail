@@ -35,7 +35,7 @@ export default function Chat({
 
   return (
     <div class="w-full flex justify-center items-center">
-      {user.pen_pal !== "" ? (
+      {user.pen_pal !== null ? (
         <ChatScreen user={user} />
       ) : (
         <SearchScreen user={user} setUser={setUser} />
@@ -84,8 +84,6 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
 
       let turn;
 
-      console.log(message);
-
       if (message === null) {
         turn = user.id > data[0].id ? "user" : "pen_pal";
       } else {
@@ -119,6 +117,25 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
                     : "waiting",
                 deliveryDate,
               }));
+
+              if (
+                n.recipient === user.id &&
+                Notification.permission === "granted" &&
+                document.visibilityState === "hidden" &&
+                penPal != null
+              ) {
+                const notif = new Notification(
+                  `New message from ${penPal.name}!`,
+                  {
+                    body: "Check your pigeon mail!",
+                    icon: "/favicon.ico",
+                  }
+                );
+
+                notif.onclick = () => {
+                  window.focus();
+                };
+              }
             }
           }
         )
@@ -127,7 +144,7 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
       setState({
         message,
         turn,
-        deliveryDate: getTimeOfDelivery(message),
+        deliveryDate: message == null ? null : getTimeOfDelivery(message),
       });
 
       return () => {
@@ -139,12 +156,16 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
   return (
     <div class="w-full flex flex-col justify-center items-center">
       <div class="w-4/5 md:w-2/3 flex flex-col items-center justify-center">
-        <h2 class="text-3xl text-center mb-6">
-          Today you're chatting with{" "}
-          <strong class="font-bold">{penPal?.name}</strong> from{" "}
-          <strong class="font-bold">{penPal?.country}</strong>!
-        </h2>
         {state == null && <Spinner />}
+        {penPal !== undefined && (
+          <div class="flex flex-col w-full items-center justify-center">
+            <h2 class="text-3xl text-center mb-6 mt-3">
+              Today you're chatting with{" "}
+              <strong class="font-bold">{penPal?.name}</strong> from{" "}
+              <strong class="font-bold">{penPal?.country}</strong>!
+            </h2>
+          </div>
+        )}
 
         {/* No messages have been sent yet */}
         {state != null && state.message == null && penPal != null && (
@@ -202,10 +223,11 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
           )}
 
         {/* Sending a message */}
-        {state?.message != null &&
+        {state != null &&
           penPal != null &&
           state.turn !== "waiting" &&
-          state.message.recipient === user.id && (
+          ((state.message != null && state.message.recipient === user.id) ||
+            (state.message == null && state.turn === "user")) && (
             <div class="pt-4 w-full flex items-center justify-center">
               <SendMailScreen user={user} penPal={penPal} />
             </div>
@@ -360,7 +382,7 @@ function SendMailScreen({
             onInput={(e) => setContent((e.target as HTMLInputElement).value)}
           />
           <Button action="primary" type="submit" disabled={loading}>
-            Send
+            {loading && <Spinner />} Send
           </Button>
         </form>
       </div>
@@ -394,47 +416,35 @@ function SearchScreen({
   };
 
   useEffect(() => {
-    (async () => {
-      if (searching) {
-        const { data } = await supabase
-          .from("users")
-          .select("id")
-          .eq("searching_today", true)
-          .neq("id", user.id);
-
-        if (data == null) {
-          await handleChangeSearchState(false);
-          return;
-        }
-
-        const selected = data[Math.floor(Math.random() * data.length)];
-
-        await Promise.all([
-          supabase
-            .from("users")
-            .update({
-              searching_today: false,
-              pen_pal: user.id,
-            })
-            .eq("id", selected.id),
-          await supabase
-            .from("users")
-            .update({
-              searching_today: false,
-              pen_pal: selected.id,
-            })
-            .eq("id", user.id),
-        ]);
-
-        await supabase
-          .from("users")
-          .select("*")
-          .eq("id", user.id)
-          .limit(1)
-          .single()
-          .then(({ data }) => setUser(data as PigeonMailUser["data"]));
-      }
-    })().then(() => {});
+    // (async () => {
+    //   if (searching) {
+    //     const { data } = await supabase
+    //       .from("users")
+    //       .select("id")
+    //       .eq("searching_today", true)
+    //       .neq("id", user.id);
+    //     if (data == null) {
+    //       await handleChangeSearchState(false);
+    //       return;
+    //     }
+    //     const selected = data[Math.floor(Math.random() * data.length)];
+    //     if (selected == null) {
+    //       return;
+    //     }
+    //     await supabase
+    //       .from("users")
+    //       .update({
+    //         searching_today: false,
+    //         pen_pal: selected.id,
+    //       })
+    //       .eq("id", user.id);
+    //     setUser((user) => ({
+    //       ...user,
+    //       searching_today: false,
+    //       pen_pal: selected.id,
+    //     }));
+    //   }
+    // })().then(() => {});
   }, [searching]);
 
   return (

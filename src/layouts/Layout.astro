@@ -1,4 +1,5 @@
 ---
+import NotificationControl from "../components/NotificationControl";
 import Button from "../components/shared/Button";
 import { getUser, isLoggedIn } from "../supabase/supabase";
 
@@ -50,6 +51,7 @@ const user = await getUser(Astro.request);
             <a href="/profile">
               <img src={user.data.avatar} class="pl-4 h-16 w-16" />
             </a>
+            <NotificationControl client:only />
           </div>
         ) : (
           <a href="/auth/login">
