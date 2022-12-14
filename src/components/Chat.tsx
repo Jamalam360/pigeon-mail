@@ -117,25 +117,6 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
                     : "waiting",
                 deliveryDate,
               }));
-
-              if (
-                n.recipient === user.id &&
-                Notification.permission === "granted" &&
-                document.visibilityState === "hidden" &&
-                penPal != null
-              ) {
-                const notif = new Notification(
-                  `New message from ${penPal.name}!`,
-                  {
-                    body: "Check your pigeon mail!",
-                    icon: "/favicon.ico",
-                  }
-                );
-
-                notif.onclick = () => {
-                  window.focus();
-                };
-              }
             }
           }
         )
@@ -193,11 +174,31 @@ function ChatScreen({ user }: { user: PigeonMailUser["data"] }) {
               }
               message={state.message}
               onCountdownCompleted={() => {
+                if (
+                  state.message?.recipient === user.id &&
+                  Notification.permission === "granted" &&
+                  document.visibilityState === "hidden" &&
+                  penPal != null
+                ) {
+                  const notif = new Notification(
+                    `New message from ${penPal.name}!`,
+                    {
+                      body: "Check your pigeon mail!",
+                      icon: "/favicon.ico",
+                    }
+                  );
+
+                  notif.onclick = () => {
+                    window.focus();
+                  };
+                }
+
                 setState(
                   (state) =>
                     ({
                       ...state,
-                      turn: "user",
+                      turn:
+                        state?.message?.sender === user.id ? "pen_pal" : "user",
                     } as any)
                 );
               }}
