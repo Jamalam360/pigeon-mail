@@ -18,8 +18,13 @@ const user = await getUser(Astro.request);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+
     <title>{title}</title>
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Chat with a daily pen pal, completely annonymously" />
+    <meta name="og:title" property="og:title" content="Chat with a daily pen pal, completely annonymously" />
+    <meta name="og:description" property="og:description" content="Chat with a daily pen pal, completely annonymously" />
+    <meta name="og:image" property="og:image" content="/world-map.svg" />
 
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link
