@@ -80,6 +80,10 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
   };
 }
 
+export async function isLoggedIn(req: Request): Promise<boolean> {
+  return (await getUser(req)) !== null;
+}
+
 export async function getUserStatistics(
   userId: string
 ): Promise<UserStatistics> {
@@ -92,8 +96,4 @@ export async function getUserStatistics(
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return data!;
-}
-
-export async function isLoggedIn(req: Request): Promise<boolean> {
-  return (await getUser(req)) !== null;
 }

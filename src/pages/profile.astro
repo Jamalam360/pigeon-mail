@@ -1,6 +1,7 @@
 ---
 import Logout from "../components/auth/Logout";
 import Countup from "../components/Countup";
+import Statistics from "../components/Statistics";
 import Layout from "../layouts/Layout.astro";
 import { getUser, getUserStatistics } from "../supabase/supabase";
 
@@ -9,8 +10,6 @@ const user = await getUser(Astro.request);
 if (!user) {
   return Astro.redirect("/auth/login");
 }
-
-const stats = await getUserStatistics(user.auth.id);
 ---
 
 <Layout title="Profile | Pigeon Mail">
@@ -31,51 +30,7 @@ const stats = await getUserStatistics(user.auth.id);
         <Logout client:load />
       </div>
 
-      <div class="flex flex-col items-center justify-center py-4 w-3/5">
-        <p class="text-2xl">
-          {user.data.name}, {
-            stats.pen_pals == 0 ? (
-              <>
-                you haven't spoken to anyone yet,{" "}
-                <a href="/chat" class="text-maize">
-                  get started
-                </a>{" "}
-                now.
-              </>
-            ) : (
-              <>
-                you've spoken to{" "}
-                {stats.pen_pals == 1 ? (
-                  <>
-                    1 pen pal from {stats.pen_pal_countries[0]}! So much more to
-                    discover!
-                  </>
-                ) : (
-                  <>
-                    <Countup client:load target={stats.pen_pals} /> from{" "}
-                    <Countup
-                      client:load
-                      target={stats.pen_pal_countries.length}
-                    />
-                  </>
-                )}
-              </>
-            )
-          }
-        </p>
-      </div>
-
-      <div class="flex flex-row flex-wrap w-3/5">
-        {
-          stats.pen_pal_countries.map((country) => (
-            <img
-              src={`https://countryflagsapi.com/svg/${country}`}
-              class="w-1/6 m-2"
-              alt={country}
-            />
-          ))
-        }
-      </div>
+      <Statistics client:load user={user} />
     </div>
   </main>
 </Layout>
