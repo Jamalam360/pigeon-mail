@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/shared/Button";
+import { getUser } from "../supabase/supabase";
+
+const user = await getUser(Astro.request);
 ---
 
 <Layout title="Pigeon Mail">
@@ -19,22 +22,25 @@ import Button from "../components/shared/Button";
       <ul class="list-disc mb-8">
         <li>Chat with a new pen pal every day.</li>
         <li>
-          Instant messaging is so last week. Wait for our pigeons to deliver
-          your mail across the globe instead.
+          Instant messaging? Wait for our pigeons to deliver
+          your mail across the globe instead. <img src="/favicon.svg" class="inline h-[1.3em]" />
         </li>
         <li>
-          Completely annonymous. Messages are deleted from our database the next
-          day.
+          Completely annonymous, only your country and first name are shared. Messages are deleted the next day.
         </li>
       </ul>
 
-      <a href="/auth/register"
-        ><Button action="primary"
-          ><p class="font-bold">Register Today</p>
-        </Button>
-      </a>
+      {
+        user == null && (
+          <a href="/auth/register">
+            <Button action="primary">
+              <p class="w-32">Register</p>
+            </Button>
+          </a>
+        )
+      }
 
-      <ul class="flex flex-row pt-6">
+      <ul class="flex flex-row">
         <li class="mr-4">
           <a href="https://github.com/Jamalam360/pigeon-mail" target="_blank"
             ><img class="w-12" src="/icons/github.svg" />

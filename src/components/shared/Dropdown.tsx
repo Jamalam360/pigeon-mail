@@ -1,10 +1,12 @@
-export default function Dropdown(props: {
-  id: string;
-  label: string;
-  disabled: boolean;
-  values: string[];
-  onChange: (e: Event) => void;
-}) {
+import { JSX } from "preact/jsx-runtime";
+
+export default function Dropdown(
+  props: {
+    id: string;
+    label: string;
+    values: string[];
+  } & JSX.HTMLAttributes<HTMLSelectElement>
+) {
   return (
     <div class="flex flex-col w-full">
       <label for={props.id}>{props.label}</label>
@@ -13,6 +15,7 @@ export default function Dropdown(props: {
         name={props.id}
         id={props.id}
         disabled={props.disabled}
+        required={props.required}
         onChange={props.onChange}
       >
         {props.values.map((v) => (

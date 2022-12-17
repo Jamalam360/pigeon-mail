@@ -55,7 +55,7 @@ export default function NotificationControl() {
   };
 
   return (
-    <div class={`pl-4 ${show ? "" : "hidden"}`}>
+    <div class={`ml-4 ${show ? "" : "hidden"}`}>
       <button alt="Enable notifications">
         <img
           src={enabled ? "/icons/bell.svg" : "/icons/bell-off.svg"}

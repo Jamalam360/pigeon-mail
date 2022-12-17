@@ -2,6 +2,11 @@ import { createClient, User } from "@supabase/supabase-js";
 import type { Database } from "./types.gen";
 import cookie from "cookie";
 
+export type UserData = Database["public"]["Tables"]["users"]["Row"];
+export type UserStatistics =
+  Database["public"]["Tables"]["user_statistics"]["Row"];
+export type Message = Database["public"]["Tables"]["messages"]["Row"];
+
 export const supabase = createClient<Database>(
   import.meta.env.PUBLIC_SUPABASE_URL,
   import.meta.env.PUBLIC_SUPABASE_KEY
@@ -9,7 +14,7 @@ export const supabase = createClient<Database>(
 
 export interface PigeonMailUser {
   auth: User;
-  data: Database["public"]["Tables"]["users"]["Row"];
+  data: UserData;
 }
 
 export async function getUser(req: Request): Promise<PigeonMailUser | null> {
@@ -67,10 +72,26 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
     return null;
   }
 
+  data.avatar = "https://via.placeholder.com/120";
+
   return {
     auth: user,
     data,
   };
+}
+
+export async function getUserStatistics(
+  userId: string
+): Promise<UserStatistics> {
+  const { data } = await supabase
+    .from("user_statistics")
+    .select("*")
+    .eq("user_id", userId)
+    .limit(1)
+    .single();
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return data!;
 }
 
 export async function isLoggedIn(req: Request): Promise<boolean> {

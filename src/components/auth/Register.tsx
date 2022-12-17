@@ -5,7 +5,6 @@ import Button from "../shared/Button";
 import Dropdown from "../shared/Dropdown";
 import Input from "../shared/Input";
 import Link from "../shared/Link";
-import Spinner from "../shared/Spinner";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -88,9 +87,10 @@ export default function Login() {
   return (
     <div class="w-full flex flex-col items-center justify-center">
       <h1 class="text-3xl text-center pb-4">Register</h1>
-      <form onSubmit={handleRegister} class="w-2/3 md:w-1/2 space-y-2">
+      <form onSubmit={handleRegister} class="w-4/5 md:w-1/2 space-y-2">
         <Input
           disabled={status.isLoading}
+          required={true}
           id="email"
           placeholder="johndoe@gmail.com"
           value={email}
@@ -100,8 +100,8 @@ export default function Login() {
         />
         <Input
           disabled={status.isLoading}
+          required={true}
           id="password"
-          placeholder="********"
           value={password}
           onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
           label="Password"
@@ -110,7 +110,6 @@ export default function Login() {
         <Input
           disabled={status.isLoading}
           id="confirm-password"
-          placeholder="********"
           value={passwordConfirmation}
           onChange={(e) =>
             setPasswordConfirmation((e.target as HTMLInputElement).value)
@@ -121,6 +120,7 @@ export default function Login() {
         <div class="pt-4" />
         <Input
           disabled={status.isLoading}
+          required={true}
           id="name"
           placeholder="James"
           value={name}
@@ -130,6 +130,7 @@ export default function Login() {
         />
         <Dropdown
           disabled={status.isLoading}
+          required={true}
           id="country"
           onChange={(e) => setCountry((e.target as HTMLOptionElement).value)}
           label="Country"
@@ -138,8 +139,8 @@ export default function Login() {
           )}
         />
         <div class="pt-3 relative flex flex-col space-y-2">
-          <Button action="primary" disabled={status.isLoading} type="submit">
-            {status.isLoading && <Spinner class="ml-4" />} Register
+          <Button action="primary" loading={status.isLoading} type="submit">
+            Register
           </Button>
           {status.error !== "" && (
             <div class="text-sm text-red-400">{status.error}</div>

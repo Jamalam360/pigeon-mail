@@ -3,7 +3,6 @@ import { supabase } from "../../supabase/supabase";
 import Link from "../shared/Link";
 import Button from "../shared/Button";
 import Input from "../shared/Input";
-import Spinner from "../shared/Spinner";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -49,9 +48,10 @@ export default function Login() {
   return (
     <div class="w-full flex flex-col items-center justify-center">
       <h1 class="text-3xl text-center pb-4">Login</h1>
-      <form onSubmit={handleLogin} class="w-2/3 md:w-1/2 space-y-2">
+      <form onSubmit={handleLogin} class="w-4/5 md:w-1/2 space-y-2">
         <Input
           disabled={status.isLoading}
+          required={true}
           id="email"
           placeholder="johndoe@gmail.com"
           value={email}
@@ -61,16 +61,16 @@ export default function Login() {
         />
         <Input
           disabled={status.isLoading}
+          required={true}
           id="password"
-          placeholder="********"
           value={password}
           onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
           label="Password"
           type="password"
         />
         <div class="pt-3 relative flex flex-col space-y-2">
-          <Button action="primary" disabled={status.isLoading} type="submit">
-            {status.isLoading && <Spinner class="ml-4" />} Login
+          <Button action="primary" loading={status.isLoading} type="submit">
+            Login
           </Button>
           {status.error !== "" && (
             <div class="text-sm text-red-400">{status.error}</div>

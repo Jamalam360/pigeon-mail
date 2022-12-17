@@ -1,37 +1,81 @@
 ---
 import Logout from "../components/auth/Logout";
+import Countup from "../components/Countup";
 import Layout from "../layouts/Layout.astro";
-import { getUser } from "../supabase/supabase";
+import { getUser, getUserStatistics } from "../supabase/supabase";
 
 const user = await getUser(Astro.request);
 
 if (!user) {
   return Astro.redirect("/auth/login");
 }
+
+const stats = await getUserStatistics(user.auth.id);
 ---
 
 <Layout title="Profile | Pigeon Mail">
-  <main class="w-full flex flex-col items-center justify-center">
+  <main class="w-full flex flex-col items-center justify-center space-y-4">
     <div class="flex flex-col items-center justify-center">
-      <div class="flex flex-row items-center space-x-4 pb-6">
-        <img
-          class="w-20 h-20 rounded-full object-cover"
-          src={user.data.avatar}
-          alt="avatar"
-        />
-        <div class="flex flex-col">
-          <h2 class="flex flex-row text-xl font-bold">
-            {user.data.name}
-            <img
-              src={`https://countryflagsapi.com/svg/${user.data.country}`}
-              class="w-8 ml-2"
-            />
-          </h2>
-          <h1 class="text-lg">{user.auth.email}</h1>
-        </div>
+      <div class="flex flex-col">
+        <h2 class="flex flex-row text-xl font-bold">
+          {user.data.name}
+          <img
+            src={`https://countryflagsapi.com/svg/${user.data.country}`}
+            class="w-8 ml-2"
+          />
+        </h2>
+        <h1 class="text-lg">{user.auth.email}</h1>
       </div>
 
-      <Logout client:load />
+      <div class="w-1/4 py-4">
+        <Logout client:load />
+      </div>
+
+      <div class="flex flex-col items-center justify-center py-4 w-3/5">
+        <p class="text-2xl">
+          {user.data.name}, {
+            stats.pen_pals == 0 ? (
+              <>
+                you haven't spoken to anyone yet,{" "}
+                <a href="/chat" class="text-maize">
+                  get started
+                </a>{" "}
+                now.
+              </>
+            ) : (
+              <>
+                you've spoken to{" "}
+                {stats.pen_pals == 1 ? (
+                  <>
+                    1 pen pal from {stats.pen_pal_countries[0]}! So much more to
+                    discover!
+                  </>
+                ) : (
+                  <>
+                    <Countup client:load target={stats.pen_pals} /> from{" "}
+                    <Countup
+                      client:load
+                      target={stats.pen_pal_countries.length}
+                    />
+                  </>
+                )}
+              </>
+            )
+          }
+        </p>
+      </div>
+
+      <div class="flex flex-row flex-wrap w-3/5">
+        {
+          stats.pen_pal_countries.map((country) => (
+            <img
+              src={`https://countryflagsapi.com/svg/${country}`}
+              class="w-1/6 m-2"
+              alt={country}
+            />
+          ))
+        }
+      </div>
     </div>
   </main>
 </Layout>

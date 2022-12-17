@@ -27,42 +27,51 @@ const user = await getUser(Astro.request);
       rel="stylesheet"
     />
   </head>
-  <body class="w-full min-h-full font-montserrat text-charcoal">
-    <header
-      class="w-full flex flex-col md:flex-row justify-center items-center p-4 md:px-8 border-b border-gray-200 mb-8"
-    >
-      <a href="/">
-        <div class="flex flex-row items-center">
-          <img src="/favicon.svg" class="h-16 w-16" />
-          <h1 class="ml-6 font-bold text-3xl">Pigeon Mail</h1>
-        </div>
-      </a>
-      <div class="flex-grow py-3"></div>
-      {
-        user ? (
+  <body
+    class="min-h-screen flex flex-col justify-between font-montserrat text-charcoal"
+  >
+    <div>
+      <header
+        class="w-full flex flex-col md:flex-row justify-center items-center p-4 md:px-8 border-b border-gray-200 mb-8"
+      >
+        <a href="/">
           <div class="flex flex-row items-center">
-            <a href="/chat">
-              <Button action="primary">
-                <p class="font-bold">
-                  Hi {user.data.name}, ready to make a friend?
-                </p>
-              </Button>
-            </a>
-            <a href="/profile">
-              <img src={user.data.avatar} class="pl-4 h-16 w-16" />
-            </a>
-            <NotificationControl client:only />
+            <img src="/favicon.svg" class="h-16 w-16" />
+            <h1 class="ml-6 font-bold text-3xl">Pigeon Mail</h1>
           </div>
-        ) : (
-          <a href="/auth/login">
-            <img src="/icons/log-in.svg" class="h-8 w-8" />
-          </a>
-        )
-      }
-    </header>
-    <slot />
-    <footer class="mt-8 mb-2 w-full text-center">
-      &copy Built by Jamalam for a Supabase Hackathon
+        </a>
+        <div class="flex-grow py-1 md:py-3"></div>
+        {
+          user ? (
+            <div class="flex flex-col h-full md:flex-row justify-center md:justify-end md:items-center md:w-2/5 space-y-2">
+              <a href="/chat" class="pt-3 md:pt-0 md:w-3/5">
+                <Button action="primary">Ready to make a friend?</Button>
+              </a>
+              <div class="w-full md:w-2/5 mt-8 md:!mt-0 h-full flex flex-row justify-center md:items-center">
+                <a href="/profile">
+                  <img
+                    alt="Your avatar"
+                    src={user.data.avatar}
+                    class="h-16 w-16"
+                  />
+                </a>
+                <NotificationControl client:only />
+              </div>
+            </div>
+          ) : (
+            <a href="/auth/login">
+              <img alt="login" src="/icons/log-in.svg" class="h-8 w-8" />
+            </a>
+          )
+        }
+      </header>
+      <slot />
+    </div>
+
+    <footer class="border-t border-gray-200 mt-8 py-2 w-full text-center">
+      &copy Built by <a href="https://jamalam.tech" class="hover:underline"
+        >Jamalam</a
+      >
     </footer>
   </body>
 </html>

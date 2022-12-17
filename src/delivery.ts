@@ -1,4 +1,5 @@
 import countries from "./data/countries_by_coords.json";
+import { Message } from "./supabase/supabase";
 
 interface Country {
   country: string;
@@ -11,6 +12,15 @@ interface Country {
 // Our pigeons travel fast!
 const SPEED = 10_000;
 const EARTH_RADIUS = 6371;
+
+export function getTimeOfDelivery(message: Message): Date {
+  const deliveryDate = new Date(message.sent_at);
+  deliveryDate.setTime(
+    deliveryDate.getTime() + message.delivery_time * 60 * 60 * 1000
+  );
+
+  return deliveryDate;
+}
 
 export function getCountdownString(deliveryTime: Date): string {
   const diff = deliveryTime.getTime() - new Date().getTime();

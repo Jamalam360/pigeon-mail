@@ -536,6 +536,29 @@ export interface Database {
           content?: string;
         };
       };
+      user_statistics: {
+        Row: {
+          user_id: string;
+          pen_pal_countries: string[];
+          pen_pals: number;
+          sent_messages: number;
+          received_messages: number;
+        };
+        Insert: {
+          user_id: string;
+          pen_pal_countries: string[];
+          pen_pals: number;
+          sent_messages: number;
+          received_messages: number;
+        };
+        Update: {
+          user_id?: string;
+          pen_pal_countries?: string[];
+          pen_pals?: number;
+          sent_messages?: number;
+          received_messages?: number;
+        };
+      };
       users: {
         Row: {
           id: string;
