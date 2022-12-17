@@ -157,11 +157,32 @@ serve(async (req) => {
     );
   }
 
+  const deliveryTime = calculateDeliveryTime(senderCountry, recipientCountry);
+
+  // Check if the message can be delivered before 00:00 UTC the next day
+  const now = new Date();
+  const deliveryDate = new Date();
+  deliveryDate.setTime(now.getTime() + deliveryTime * 1000 * 60 * 60);
+  const deadline = new Date();
+  deadline.setUTCHours(0, 0, 0, 0);
+  deadline.setDate(deadline.getDate() + 1);
+
+  if (deliveryDate > deadline) {
+    return new Response(
+      JSON.stringify({
+        error: "Message cannot be delivered in time, sorry :(",
+      }),
+      {
+        headers: corsHeaders,
+      }
+    );
+  }
+
   const { error } = await supabase.from("messages").insert({
     sender,
     recipient,
     content,
-    delivery_time: calculateDeliveryTime(senderCountry, recipientCountry),
+    delivery_time: deliveryTime,
   });
 
   if (error !== null) {
