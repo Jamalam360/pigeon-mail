@@ -12,8 +12,11 @@ export default function Login() {
     isLoading: false,
   });
 
+  console.log(password);
+
   const handleLogin = async (e: Event) => {
     e.preventDefault();
+    console.log(password);
 
     setStatus({ error: "", isLoading: true });
 
@@ -55,7 +58,7 @@ export default function Login() {
           id="email"
           placeholder="johndoe@gmail.com"
           value={email}
-          onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+          updater={setEmail}
           label="Email"
           type="email"
         />
@@ -64,7 +67,7 @@ export default function Login() {
           required={true}
           id="password"
           value={password}
-          onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+          updater={setPassword}
           label="Password"
           type="password"
         />

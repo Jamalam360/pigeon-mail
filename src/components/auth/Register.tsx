@@ -94,7 +94,7 @@ export default function Login() {
           id="email"
           placeholder="johndoe@gmail.com"
           value={email}
-          onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+          updater={setEmail}
           label="Email"
           type="email"
         />
@@ -103,7 +103,7 @@ export default function Login() {
           required={true}
           id="password"
           value={password}
-          onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+          updater={setPassword}
           label="Password"
           type="password"
         />
@@ -111,9 +111,7 @@ export default function Login() {
           disabled={status.isLoading}
           id="confirm-password"
           value={passwordConfirmation}
-          onChange={(e) =>
-            setPasswordConfirmation((e.target as HTMLInputElement).value)
-          }
+          updater={setPasswordConfirmation}
           label="Confirm password"
           type="password"
         />
@@ -124,7 +122,7 @@ export default function Login() {
           id="name"
           placeholder="James"
           value={name}
-          onChange={(e) => setName((e.target as HTMLInputElement).value)}
+          updater={setName}
           label="First Name"
           type="text"
         />

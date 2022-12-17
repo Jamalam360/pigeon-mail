@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
-import { calculateDeliveryTime, getTimeOfDelivery } from "../delivery";
+import { getTimeOfDelivery } from "../delivery";
 import {
   Message,
   PigeonMailUser,
@@ -222,7 +222,9 @@ function Chat({ user }: { user: UserData }) {
           penPal != null &&
           state.turn !== "waiting" &&
           state.message.sender === penPal.id && (
-            <Mail content={state.message.content} sender={penPal} />
+            <div class="w-full md:w-4/5">
+              <Mail content={state.message.content} sender={penPal} />
+            </div>
           )}
 
         {/* Message sent, and has been received by the pen pal */}
@@ -258,29 +260,41 @@ function SendMailScreen({
   penPal: UserData;
 }) {
   const [content, setContent] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState({
+    loading: false,
+    error: null as string | null,
+  });
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
 
-    if (loading) return;
+    if (status.loading) return;
 
-    setLoading(true);
+    setStatus({ loading: true, error: null });
 
-    const { error } = await supabase.from("messages").insert({
-      sender: user.id,
-      recipient: penPal.id,
-      content,
-      delivery_time: calculateDeliveryTime(user.country, penPal.country),
+    const res = await supabase.functions.invoke("send_message", {
+      body: {
+        sender: user.id,
+        senderCountry: user.country,
+        recipient: penPal.id,
+        recipientCountry: penPal.country,
+        content,
+      },
     });
 
-    if (error != null) {
-      console.error(error.message);
-      setLoading(false);
+    if (res.error != null) {
+      setStatus({ loading: false, error: res.data });
       return;
+    } else {
+      const data = JSON.parse(res.data == null ? "{}" : res.data);
+
+      if (data.error != null) {
+        setStatus({ loading: false, error: data.error });
+        return;
+      }
     }
 
-    setLoading(false);
+    setStatus({ loading: false, error: null });
   };
 
   return (
@@ -294,7 +308,10 @@ function SendMailScreen({
             value={content}
             onInput={(e) => setContent((e.target as HTMLInputElement).value)}
           />
-          <Button action="primary" type="submit" loading={loading}>
+          {status.error != null && (
+            <p class="text-red-500 text-sm mb-4">{status.error}</p>
+          )}
+          <Button action="primary" type="submit" loading={status.loading}>
             Send
           </Button>
         </form>
