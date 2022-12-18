@@ -31,6 +31,22 @@ serve(async (req) => {
 
   const { id, name, country } = (await req.json()) as Req;
 
+  const { data: existing } = await supabase
+    .from("users")
+    .select("id")
+    .eq("id", id);
+
+  if (existing != null && existing.length > 0) {
+    return new Response(
+      JSON.stringify({
+        error: "User already exists",
+      }),
+      {
+        headers: corsHeaders,
+      }
+    );
+  }
+
   for (let i = colors.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [colors[i], colors[j]] = [colors[j], colors[i]];
