@@ -11,7 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [name, setName] = useState("");
-  const [country, setCountry] = useState("Afghanistan");
+  const [country, setCountry] = useState("");
 
   const [status, setStatus] = useState({
     error: "",
@@ -72,6 +72,12 @@ export default function Login() {
     });
 
     if (iError != null) {
+      await supabase.functions.invoke("remove_failed_user", {
+        body: {
+          id: data.user.id,
+        },
+      });
+
       setStatus(() => ({
         error: iError.message,
         success: false,
