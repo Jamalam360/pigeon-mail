@@ -35,7 +35,7 @@ export default function Login() {
       email,
       password,
       options: {
-        emailRedirectTo: "https://pigeon-mail.pages.dev/auth/confirm-email",
+        emailRedirectTo: "https://pigeonmail.xyz/auth/confirm-email",
       },
     });
 

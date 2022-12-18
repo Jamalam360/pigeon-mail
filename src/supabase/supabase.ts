@@ -9,7 +9,7 @@ export type Message = Database["public"]["Tables"]["messages"]["Row"];
 
 export const supabase = createClient<Database>(
   import.meta.env.PUBLIC_SUPABASE_URL,
-  import.meta.env.PUBLIC_SUPABASE_KEY
+  import.meta.env.PUBLIC_SUPABASE_KEY,
 );
 
 export interface PigeonMailUser {
@@ -42,7 +42,7 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
       return null;
     }
 
-    const res = await fetch("https://pigeon-mail.pages.dev/api/login", {
+    const res = await fetch("https://pigeonmail.xyz/api/login", {
       method: "POST",
       headers: new Headers({ "Content-Type": "application/json" }),
       credentials: "same-origin",
@@ -83,7 +83,7 @@ export async function isLoggedIn(req: Request): Promise<boolean> {
 }
 
 export async function getUserStatistics(
-  userId: string
+  userId: string,
 ): Promise<UserStatistics> {
   const { data } = await supabase
     .from("user_statistics")
