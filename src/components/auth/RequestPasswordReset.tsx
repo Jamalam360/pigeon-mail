@@ -17,7 +17,7 @@ export default function RequestPasswordReset() {
     setStatus({ error: "", loading: true, success: false });
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:3000/auth/reset-password",
+      redirectTo: "https://pigeon-mail.pages.dev/auth/reset-password",
     });
 
     if (error != null) {

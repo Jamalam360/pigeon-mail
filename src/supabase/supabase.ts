@@ -42,7 +42,7 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
       return null;
     }
 
-    const res = await fetch("http://localhost:3000/api/login", {
+    const res = await fetch("https://pigeon-mail.pages.dev/api/login", {
       method: "POST",
       headers: new Headers({ "Content-Type": "application/json" }),
       credentials: "same-origin",
@@ -71,8 +71,6 @@ export async function getUser(req: Request): Promise<PigeonMailUser | null> {
     console.error(error);
     return null;
   }
-
-  data.avatar = "https://via.placeholder.com/120";
 
   return {
     auth: user,

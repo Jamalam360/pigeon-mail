@@ -42,7 +42,7 @@ export default function Login() {
       email,
       password,
       options: {
-        emailRedirectTo: "http://localhost:3000/auth/confirm-email",
+        emailRedirectTo: "https://pigeon-mail.pages.dev/auth/confirm-email",
       },
     });
 
@@ -66,7 +66,7 @@ export default function Login() {
       id: data.user.id,
       country: country.startsWith("The") ? "t" + country.slice(1) : country,
       name,
-      avatar: `https://source.boringavatars.com/beam/120/${name}?colors=${colors.join(
+      avatar: `https://boring-avatars-service-seven.vercel.app//beam/120/${name}?colors=${colors.join(
         ","
       )}`,
     });
