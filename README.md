@@ -4,7 +4,7 @@
 
 Chat with a daily pen pal, completely anonymously.
 
-Visit [pigeonmail.xyz](https://pigeon-mail.pages.dev) to get started (domain purchase pending).
+Visit [pigeon-mail.pages.dev](https://pigeon-mail.pages.dev) to get started (proper domain pending).
 
 ## Technology
 
@@ -12,3 +12,7 @@ Visit [pigeonmail.xyz](https://pigeon-mail.pages.dev) to get started (domain pur
 - [Preact](https://preactjs.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Supabase](https://supabase.io/)
+    - Auth
+    - Database
+    - Edge Functions
+    - Realtime
