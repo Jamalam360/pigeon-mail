@@ -25,7 +25,11 @@ export default function Button({
       } px-2 rounded focus:outline-none focus:shadow-outline w-full min-h-8 flex flex-row justify-center items-center align-center`}
     >
       <span class="p-2 font-bold">
-        {loading ?? false ? <Spinner /> : children}
+        {loading ?? false ? (
+          <Spinner class={action === "primary" ? "" : "stroke-white"} />
+        ) : (
+          children
+        )}
       </span>
     </button>
   );

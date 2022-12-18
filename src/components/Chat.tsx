@@ -68,6 +68,10 @@ function Chat({ user }: { user: UserData }) {
     turn: "user" | "pen_pal" | "waiting";
     deliveryDate: Date | null;
   }>();
+  const [reportState, setReportState] = useState({
+    loading: false,
+    message: null as string | null,
+  });
 
   useEffect(() => {
     (async () => {
@@ -149,6 +153,41 @@ function Chat({ user }: { user: UserData }) {
       };
     })();
   }, [user.pen_pal]);
+
+  const handleReport = async () => {
+    setReportState({
+      loading: true,
+      message: "",
+    });
+
+    const res = await supabase.functions.invoke("report_pen_pal", {
+      body: {
+        id: user.id,
+      },
+    });
+
+    if (res.error != null) {
+      setReportState({
+        loading: false,
+        message: res.error,
+      });
+    } else {
+      const data = JSON.parse(res.data == null ? "{}" : res.data);
+
+      if (data.error != null) {
+        setReportState({
+          loading: false,
+          message: data.error,
+        });
+      } else {
+        setReportState({
+          loading: false,
+          message:
+            "We've sorry to hear you are having problems with this user. We have received your report and will investigate, thank you for keeping Pigeon Mail a safe place.",
+        });
+      }
+    }
+  };
 
   return (
     <div class="w-full flex flex-col justify-center items-center">
@@ -247,6 +286,22 @@ function Chat({ user }: { user: UserData }) {
               <SendMailScreen user={user} penPal={penPal} />
             </div>
           )}
+
+        {/* Reporting */}
+        <div class="w-3/5 pt-8 flex flex-col items-center justify-center">
+          <div class="w-3/5 flex items-center justify-center">
+            <Button
+              onClick={handleReport}
+              action="danger"
+              loading={reportState.loading}
+            >
+              Report User
+            </Button>
+          </div>
+          {reportState.message != null && (
+            <p class="text-sm pt-2">{reportState.message}</p>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -283,7 +338,7 @@ function SendMailScreen({
     });
 
     if (res.error != null) {
-      setStatus({ loading: false, error: res.data });
+      setStatus({ loading: false, error: res.error });
       return;
     } else {
       const data = JSON.parse(res.data == null ? "{}" : res.data);
