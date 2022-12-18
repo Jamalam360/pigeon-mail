@@ -1,5 +1,8 @@
 ---
 import ConfirmEmail from "../../components/auth/ConfirmEmail";
+import Layout from "../../layouts/Layout.astro";
 ---
 
-<ConfirmEmail client:load />
+<Layout title="Confirm Email | Pigeon Mail">
+  <ConfirmEmail client:only />
+</Layout>

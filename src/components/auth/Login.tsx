@@ -9,16 +9,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState({
     error: "",
-    isLoading: false,
+    loading: false,
   });
-
-  console.log(password);
 
   const handleLogin = async (e: Event) => {
     e.preventDefault();
-    console.log(password);
 
-    setStatus({ error: "", isLoading: true });
+    setStatus({ error: "", loading: true });
 
     const { error, data } = await supabase.auth.signInWithPassword({
       email,
@@ -40,10 +37,10 @@ export default function Login() {
       setStatus(() => ({
         error: error?.message ?? "Failed to login",
         success: false,
-        isLoading: false,
+        loading: false,
       }));
     } else {
-      setStatus({ error: "", isLoading: false });
+      setStatus({ error: "", loading: false });
       window.location.href = "/";
     }
   };
@@ -53,7 +50,7 @@ export default function Login() {
       <h1 class="text-3xl text-center pb-4">Login</h1>
       <form onSubmit={handleLogin} class="w-4/5 md:w-1/2 space-y-2">
         <Input
-          disabled={status.isLoading}
+          disabled={status.loading}
           required={true}
           id="email"
           placeholder="johndoe@gmail.com"
@@ -63,7 +60,7 @@ export default function Login() {
           type="email"
         />
         <Input
-          disabled={status.isLoading}
+          disabled={status.loading}
           required={true}
           id="password"
           value={password}
@@ -72,13 +69,16 @@ export default function Login() {
           type="password"
         />
         <div class="pt-3 relative flex flex-col space-y-2">
-          <Button action="primary" loading={status.isLoading} type="submit">
+          <Button action="primary" loading={status.loading} type="submit">
             Login
           </Button>
           {status.error !== "" && (
-            <div class="text-sm text-red-400">{status.error}</div>
+            <p class="text-sm text-red-400">{status.error}</p>
           )}
           <Link href="/auth/register">Don't have an account?</Link>
+          <Link href="/auth/request-password-reset">
+            Forgotten your password?
+          </Link>
         </div>
       </form>
     </div>

@@ -1,10 +1,10 @@
-import { useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { supabase } from "../../supabase/supabase";
 
 export default function ConfirmEmail() {
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
     const sp = new URLSearchParams(window.location.hash.slice(1));
     const token = sp.get("access_token");
     const refreshToken = sp.get("refresh_token");
@@ -17,7 +17,7 @@ export default function ConfirmEmail() {
         })
         .then((r) => {
           if (r.error != null) {
-            console.error(r.error);
+            setError("Invalid link");
           }
 
           fetch("/api/login", {
@@ -28,20 +28,15 @@ export default function ConfirmEmail() {
               access_token: r.data.session?.access_token,
               refresh_token: r.data.session?.refresh_token,
             }),
-          }).then((r) => {
-            if (!r.ok) {
-              console.error("Failed to login");
-            }
-
+          }).then((_) => {
             window.location.hash = "";
             window.location.href = "/";
           });
         });
     } else {
-      console.error("No token found");
-      window.location.href = "/";
+      setError("Invlaid link");
     }
   }, []);
 
-  return <div />;
+  return <>{error != null && <p class="text-sm text-red-400">{error}</p>}</>;
 }

@@ -15,18 +15,18 @@ export default function Login() {
 
   const [status, setStatus] = useState({
     error: "",
-    isLoading: false,
+    loading: false,
   });
 
   const handleRegister = async (e: Event) => {
     e.preventDefault();
 
-    setStatus({ error: "", isLoading: true });
+    setStatus({ error: "", loading: true });
 
     if (password !== passwordConfirmation) {
       setStatus({
         error: "Passwords do not match",
-        isLoading: false,
+        loading: false,
       });
       return;
     }
@@ -50,14 +50,14 @@ export default function Login() {
       setStatus(() => ({
         error: error.message,
         success: false,
-        isLoading: false,
+        loading: false,
       }));
       return;
     } else if (data.user == null) {
       setStatus(() => ({
         error: "Something went wrong",
         success: false,
-        isLoading: false,
+        loading: false,
       }));
       return;
     }
@@ -75,12 +75,12 @@ export default function Login() {
       setStatus(() => ({
         error: iError.message,
         success: false,
-        isLoading: false,
+        loading: false,
       }));
       return;
     }
 
-    setStatus({ error: "", isLoading: false });
+    setStatus({ error: "", loading: false });
     window.location.href = "/auth/please-confirm-email";
   };
 
@@ -89,7 +89,7 @@ export default function Login() {
       <h1 class="text-3xl text-center pb-4">Register</h1>
       <form onSubmit={handleRegister} class="w-4/5 md:w-1/2 space-y-2">
         <Input
-          disabled={status.isLoading}
+          disabled={status.loading}
           required={true}
           id="email"
           placeholder="johndoe@gmail.com"
@@ -99,7 +99,7 @@ export default function Login() {
           type="email"
         />
         <Input
-          disabled={status.isLoading}
+          disabled={status.loading}
           required={true}
           id="password"
           value={password}
@@ -108,7 +108,7 @@ export default function Login() {
           type="password"
         />
         <Input
-          disabled={status.isLoading}
+          disabled={status.loading}
           id="confirm-password"
           value={passwordConfirmation}
           updater={setPasswordConfirmation}
@@ -117,7 +117,7 @@ export default function Login() {
         />
         <div class="pt-4" />
         <Input
-          disabled={status.isLoading}
+          disabled={status.loading}
           required={true}
           id="name"
           placeholder="James"
@@ -127,7 +127,7 @@ export default function Login() {
           type="text"
         />
         <Dropdown
-          disabled={status.isLoading}
+          disabled={status.loading}
           required={true}
           id="country"
           onChange={(e) => setCountry((e.target as HTMLOptionElement).value)}
@@ -137,11 +137,11 @@ export default function Login() {
           )}
         />
         <div class="pt-3 relative flex flex-col space-y-2">
-          <Button action="primary" loading={status.isLoading} type="submit">
+          <Button action="primary" loading={status.loading} type="submit">
             Register
           </Button>
           {status.error !== "" && (
-            <div class="text-sm text-red-400">{status.error}</div>
+            <p class="text-sm text-red-400">{status.error}</p>
           )}
           <Link href="/auth/login">Already have an account?</Link>
         </div>
