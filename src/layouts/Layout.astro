@@ -25,9 +25,10 @@ const user = await getUser(Astro.request);
 
     <meta property="og:url" content="https://pigeon-mail.pages.dev" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pigeon Mail" />
     <meta
       property="og:title"
-      content="Pigeon Mail | Chat with a daily pen pal, completely anonymously"
+      content="Chat with a daily pen pal, completely anonymously"
     />
     <meta
       property="og:description"
@@ -36,6 +37,10 @@ const user = await getUser(Astro.request);
     <meta
       property="og:image"
       content="https://pigeon-mail.pages.dev/world-map.svg"
+    />
+    <meta
+      property="og:image:alt"
+      content="A world map."
     />
 
     <meta name="twitter:card" content="summary_large_image" />
