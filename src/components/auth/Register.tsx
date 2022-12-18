@@ -31,13 +31,6 @@ export default function Login() {
       return;
     }
 
-    const colors = ["3b434f", "adb4bd", "fdca4d", "666e7a"];
-
-    for (let i = colors.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [colors[i], colors[j]] = [colors[j], colors[i]];
-    }
-
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -62,28 +55,24 @@ export default function Login() {
       return;
     }
 
-    const { error: iError } = await supabase.from("users").insert({
-      id: data.user.id,
-      country: country.startsWith("The") ? "t" + country.slice(1) : country,
-      name,
-      avatar: `https://boring-avatars-service-seven.vercel.app//beam/120/${name}?colors=${colors.join(
-        ","
-      )}`,
+    const res = await supabase.functions.invoke("register_user_data", {
+      body: {
+        id: data.user.id,
+        name,
+        country,
+      },
     });
 
-    if (iError != null) {
-      await supabase.functions.invoke("remove_failed_user", {
-        body: {
-          id: data.user.id,
-        },
-      });
-
-      setStatus(() => ({
-        error: iError.message,
-        success: false,
-        loading: false,
-      }));
+    if (res.error != null) {
+      setStatus({ loading: false, error: res.error });
       return;
+    } else {
+      const data = JSON.parse(res.data == null ? "{}" : res.data);
+
+      if (data.error != null) {
+        setStatus({ loading: false, error: data.error });
+        return;
+      }
     }
 
     setStatus({ error: "", loading: false });
